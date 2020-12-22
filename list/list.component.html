@@ -1,0 +1,101 @@
+<div class='row'>
+    <nav class="navbar col-12">
+        <div class='head-back text-center'>
+            <img [src]='imageUrl' title='home' class="img-logo" />
+        </div>
+        <span class='nav-link right cursor' (click)='onLogout()'><i class="fa fa-power-off" aria-hidden="true"></i> Logout
+        </span>
+    </nav>
+</div>
+
+<div class='container-fluid'>
+    <table class='container table text-white' *ngIf='!editUser, else editProfile'>
+        <tr>
+            <th>Sr.No</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>Action</th>
+        </tr>
+        <tr *ngFor="let user of users, index as i">
+            <td class='text-center'> {{i+1}}</td>
+            <td>{{user.fullname }}</td>
+            <td>{{user.email }}</td>
+            <td>{{user.mobile}}</td>
+            <td>
+                <!--i class='fas fa-user cursor'(click)='profile(user._id)' ></i>&nbsp; &nbsp;-->
+                <i class=" fas fa-edit cursor" (click)="onEdit(user)"></i>&nbsp; &nbsp;<i class=" fas fa-trash cursor"
+                    (click)="onDelete(user._id)"></i>
+            </td>
+        </tr>
+    </table>
+    <ng-template #editProfile>
+       <form [formGroup]="signUpForm" (ngSubmit)="onConfirm()" class="col-lg-4 offset-lg-4 pad edit">
+                    <div class='form-group'>
+                        Full name<br>
+                        <input type='text' class="form-control name" formControlName='fullname' placeholder="name"
+                            required minlength="4" maxlength="30"
+                            [ngClass]="fullnamefromform.valid?'is-valid':onConfirmClick?'is-invalid':''">
+                        <span
+                            *ngIf="onConfirmClick && (fullnamefromform.invalid) && (fullnamefromform.dirty || fullnamefromform.touched)"
+                            class="info-error">
+                            <span *ngIf='fullnamefromform.errors?.required'>
+                                name required
+                            </span>
+                            <span *ngIf='fullnamefromform.errors?.minlength'>
+                                name need to be minimum of 4 letters
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class='form-group'>
+                        Mobile number
+                        <input type='text' class="form-control" required maxlength="10" formControlName='mobile'
+                            placeholder="10 digit mobile number"
+                            [ngClass]="mobilefromform.valid?'is-valid':onConfirmClick?'is-invalid':''">
+                        <span
+                            *ngIf="onConfirmClick && mobilefromform.invalid && (mobilefromform.dirty ||mobilefromform.touched)"
+                            class="info-error">
+                            <span *ngIf='mobilefromform.errors?.required'>
+                                Mobile required
+                            </span>
+                            <span
+                                *ngIf='mobilefromform.errors?.pattern || mobilefromform.errors?.minlength || mobilefromform.errors?.maxlength'>
+                                Invalid Mobile Number
+                            </span>
+                        </span>
+                    </div>
+                    <div class='form-group'>
+                        Email
+                        <input type='email' class="form-control" formControlName='email' placeholder="abc@gmail.com"
+                            required [ngClass]="emailfromform.valid?'is-valid':onConfirmClick?'is-invalid':''">
+                        <span
+                            *ngIf="onConfirmClick && emailfromform.invalid && (emailfromform.dirty ||emailfromform.touched)"
+                            class="info-error">
+                            <span *ngIf='emailfromform.errors?.required'>
+                                Email required
+                            </span>
+                            <span *ngIf='emailfromform.errors?.pattern'>
+                                Invalid email format
+                            </span>
+                        </span>
+                    </div>
+                    <div class='form-group'>
+                        City<br>
+                        <input type='text' class="form-control name" formControlName='city' placeholder="city" required
+                            minlength="4" maxlength="16"
+                            [ngClass]="cityfromform.valid?'is-valid':onConfirmClick?'is-invalid':''">
+                        <span
+                            *ngIf="onConfirmClick && (cityfromform.invalid) && (cityfromform.dirty || cityfromform.touched)"
+                            class="info-error">
+                            <span *ngIf='cityfromform.errors?.required'>
+                                City required
+                            </span>
+                        </span>
+                    </div>
+
+                    <button class="btn btn-success">Save</button>
+                    <p class="info-error info-message">{{errorMessage}}</p>
+                </form>
+    </ng-template>
+</div>
